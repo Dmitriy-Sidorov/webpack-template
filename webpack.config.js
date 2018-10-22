@@ -2,12 +2,13 @@ let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: {
-        index: path.join(__dirname, 'src', 'index')
-    },
+    entry: path.join(__dirname, './src', 'index'),
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(__dirname, './dist'),
         filename: '[name].js'
+    },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.scss', '.css']
     },
     module: {
         rules: [
@@ -72,8 +73,6 @@ module.exports = {
             }
         ]
     },
-    resolve: {
-        extensions: ['*', '.js', '.jsx', '.scss', '.css']
     devServer: {
         overlay: true
     },

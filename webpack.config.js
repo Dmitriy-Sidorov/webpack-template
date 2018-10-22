@@ -74,6 +74,8 @@ module.exports = {
     },
     resolve: {
         extensions: ['*', '.js', '.jsx', '.scss', '.css']
+    devServer: {
+        overlay: true
     },
     plugins: [
         new HtmlWebpackPlugin({

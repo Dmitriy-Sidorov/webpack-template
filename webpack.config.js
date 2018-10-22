@@ -1,7 +1,7 @@
 let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
+let conf = {
     entry: path.join(__dirname, './src', 'index'),
     output: {
         path: path.join(__dirname, './dist'),
@@ -82,4 +82,10 @@ module.exports = {
             filename: path.join(__dirname, 'dist', 'index.html')
         })
     ]
+};
+
+module.exports = (env, options) => {
+    let production = options.mode === 'production';
+    conf.devtool = production ? false : 'source-map';
+    return conf;
 };

@@ -46,6 +46,9 @@ let conf = {
                             options: {
                                 sourceMap: true
                             }
+                        },
+                        {
+                            loader: 'sass-bulk-import-loader',
                         }
                     ]
                 })

@@ -1,15 +1,16 @@
-let path = require('path');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let path = require("path");
+let HtmlWebpackPlugin = require("html-webpack-plugin");
+let ExtractTextPlugin = require("extract-text-webpack-plugin");
+const autoprefixer = require("autoprefixer");
 
 let conf = {
-    entry: path.join(__dirname, './src', 'index'),
+    entry: path.join(__dirname, "./src", "index"),
     output: {
-        path: path.join(__dirname, './dist'),
-        filename: '[name].js'
+        path: path.join(__dirname, "./dist"),
+        filename: "[name].js"
     },
     resolve: {
-        extensions: ['*', '.js', '.jsx', '.scss', '.css']
+        extensions: ["*", ".js", ".jsx", ".scss", ".css"]
     },
     module: {
         rules: [
@@ -17,38 +18,72 @@ let conf = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader'
-                },
+                    loader: "babel-loader"
+                }
             },
 
             {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: 'css-loader'
+                    fallback: "style-loader",
+                    use: [
+                        {
+                            loader: "css-loader"
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                plugins: [
+                                    autoprefixer({
+                                        browsers: [
+                                            "ie >= 10",
+                                            "last 20 version"
+                                        ],
+                                        grid: true
+                                    })
+                                ],
+                                sourceMap: true
+                            }
+                        }
+                    ]
                 })
             },
 
             {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
+                    fallback: "style-loader",
                     use: [
                         {
-                            loader: 'css-loader',
+                            loader: "css-loader",
                             options: {
                                 minimize: true,
                                 sourceMap: true
                             }
                         },
                         {
-                            loader: 'sass-loader',
+                            loader: "postcss-loader",
+                            options: {
+                                plugins: [
+                                    autoprefixer({
+                                        browsers: [
+                                            "ie >= 10",
+                                            "last 20 version"
+                                        ],
+                                        grid: true
+                                    })
+                                ],
+                                sourceMap: true
+                            }
+                        },
+                        {
+                            loader: "sass-loader",
                             options: {
                                 sourceMap: true
                             }
                         },
                         {
-                            loader: 'sass-bulk-import-loader',
+                            loader: "sass-bulk-import-loader"
                         }
                     ]
                 })
@@ -58,10 +93,10 @@ let conf = {
                 test: /\.(png|jpg|gif)$/,
                 use: [
                     {
-                        loader: 'file-loader',
+                        loader: "file-loader",
                         options: {
-                            name: '[path][name].[ext]',
-                            publicPath: path.join(__dirname, 'dist/assets/')
+                            name: "[path][name].[ext]",
+                            publicPath: path.join(__dirname, "dist/assets/")
                         }
                     }
                 ]
@@ -69,22 +104,26 @@ let conf = {
 
             {
                 test: /\.(woff|woff2)$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=./fonts/[name].[ext]'
+                loader:
+                    "url-loader?limit=10000&mimetype=application/font-woff&name=./fonts/[name].[ext]"
             },
 
             {
                 test: /\.ttf$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./fonts/[name].[ext]'
+                loader:
+                    "url-loader?limit=10000&mimetype=application/octet-stream&name=./fonts/[name].[ext]"
             },
 
             {
                 test: /\.eot$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./fonts/[name].[ext]'
+                loader:
+                    "url-loader?limit=10000&mimetype=application/octet-stream&name=./fonts/[name].[ext]"
             },
 
             {
                 test: /\.svg$/,
-                loader: 'url-loader?limit=10000&mimetype=application/svg+xml&name=./fonts/[name].[ext]'
+                loader:
+                    "url-loader?limit=10000&mimetype=application/svg+xml&name=./fonts/[name].[ext]"
             }
         ]
     },
@@ -95,16 +134,16 @@ let conf = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'index.html'),
-            filename: path.join(__dirname, 'dist', 'index.html')
+            template: path.join(__dirname, "src", "index.html"),
+            filename: path.join(__dirname, "dist", "index.html")
         }),
 
-        new ExtractTextPlugin('main.css'),
+        new ExtractTextPlugin("main.css")
     ]
 };
 
 module.exports = (env, options) => {
-    let production = options.mode === 'production';
-    conf.devtool = production ? false : 'source-map';
+    let production = options.mode === "production";
+    conf.devtool = production ? false : "source-map";
     return conf;
 };
